@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Outline Printer cue sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --bg: #f4f5f7; --surface: #ffffff; --ink: #17202b; --muted: #586374; --line: #d7dce3; --tint: #eaeff4;
+  --brand: #14507a; --brand-ink: #ffffff; --go-ink: #ffffff;
+  --c-prep: #5a6b86; --c-flight: #0e6b8a; --c-standby: #9a6200; --c-go: #b23f08; --c-wrap: #1d7448;
+  --warn-bg: #fdf1dc; --go-bg: #fde9dc; --ok-bg: #e3f3ea;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151a; --surface: #1a2028; --ink: #e8ebef; --muted: #a5afbd; --line: #323b47; --tint: #222b36;
+    --brand: #7db8e8; --brand-ink: #0b1a28; --go-ink: #1f0e04;
+    --c-prep: #9fb0cc; --c-flight: #6fc3df; --c-standby: #e3b25a; --c-go: #f19a6a; --c-wrap: #7ad3a1;
+    --warn-bg: #3a2d14; --go-bg: #3b2316; --ok-bg: #16301f;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151a; --surface: #1a2028; --ink: #e8ebef; --muted: #a5afbd; --line: #323b47; --tint: #222b36;
+  --brand: #7db8e8; --brand-ink: #0b1a28; --go-ink: #1f0e04;
+  --c-prep: #9fb0cc; --c-flight: #6fc3df; --c-standby: #e3b25a; --c-go: #f19a6a; --c-wrap: #7ad3a1;
+  --warn-bg: #3a2d14; --go-bg: #3b2316; --ok-bg: #16301f;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
+body { font-family: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 17px; line-height: 1.5; }
+.app { max-width: 640px; margin: 0 auto; padding: 16px 16px 150px; }
+h1 { font-size: 26px; line-height: 1.2; margin: 4px 0 6px; font-weight: 700; }
+h2 { font-size: 15px; font-weight: 700; margin: 0 0 8px; color: var(--muted); }
+p { margin: 0 0 12px; }
+.lede { color: var(--muted); }
+.num { font-variant-numeric: tabular-nums; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.top .who { font-weight: 700; font-size: 18px; line-height: 1.25; }
+.top .when { color: var(--muted); font-size: 15px; }
+.clock { font-size: 20px; font-weight: 700; text-align: right; }
+.clock small { display: block; color: var(--muted); font-size: 12px; font-weight: 400; }
+.progress { height: 8px; border-radius: 4px; background: var(--tint); overflow: hidden; margin: 6px 0 4px; }
+.progress i { display: block; height: 100%; background: var(--brand); }
+.ptext { color: var(--muted); font-size: 14px; margin-bottom: 14px; display: flex; justify-content: space-between; gap: 8px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+.now { border-left: 8px solid var(--stripe, var(--brand)); scroll-margin-top: 12px; }
+.now:focus { outline: none; }
+.sect { margin: 20px 0 0; }
+.phase { font-size: 14px; font-weight: 700; color: var(--stripe, var(--muted)); margin-bottom: 2px; }
+.now h1 { font-size: 24px; }
+.lines { margin: 10px 0 0; padding-left: 20px; }
+.lines li { margin-bottom: 6px; }
+.tip { margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: var(--tint); font-size: 15px; }
+.tip b { display: block; font-size: 13px; color: var(--muted); font-weight: 700; margin-bottom: 2px; }
+.timer { margin-top: 14px; display: flex; align-items: baseline; gap: 10px; }
+.timer .big { font-size: 44px; font-weight: 700; line-height: 1; }
+.timer .lab { color: var(--muted); font-size: 14px; }
+.timer.slow .big { color: var(--c-go); }
+.note { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: var(--warn-bg); font-size: 15px; }
+.note.go { background: var(--go-bg); }
+.next { color: var(--muted); font-size: 15px; margin: -2px 2px 14px; }
+.row2 { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.btn { min-height: 48px; padding: 10px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; font-size: 16px; }
+.btn.primary { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); }
+.btn.go { background: var(--c-go); color: var(--go-ink); border-color: var(--c-go); }
+.btn.quiet { font-weight: 400; color: var(--muted); }
+.btn.wide { width: 100%; }
+.btn[disabled] { opacity: .45; cursor: default; }
+.bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); }
+.bar .in { max-width: 640px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px; }
+.bar .in.ask .btn { flex: 1 1 42%; }
+.bar .btn.main { flex: 1; min-height: 56px; font-size: 18px; }
+.phasehead { display: flex; align-items: center; gap: 8px; margin: 18px 0 6px; font-weight: 700; font-size: 15px; color: var(--c, var(--muted)); }
+.phasehead::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--c, var(--muted)); }
+.list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+.list li { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-top: 1px solid var(--line); font-size: 16px; }
+.list li:first-child { border-top: 0; }
+.list .mark { flex: none; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; font-size: 13px; font-weight: 700; }
+.list li.done .mark { background: var(--c-wrap); border-color: var(--c-wrap); color: var(--surface); }
+.list li.skip .mark { border-style: dashed; }
+.list li.now { background: var(--tint); font-weight: 700; }
+.list li.now .mark { border-color: var(--brand); }
+.list li.todo { color: var(--muted); }
+.list .t { margin-left: auto; color: var(--muted); font-size: 14px; font-weight: 400; }
+.tag { font-size: 12px; font-weight: 400; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; margin-left: 6px; }
+label.f { display: block; font-weight: 700; font-size: 15px; margin: 14px 0 4px; }
+.f small { font-weight: 400; color: var(--muted); }
+input[type=text], input[type=date], input[type=time], input[type=number] { width: 100%; min-height: 48px; padding: 8px 12px; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.opt { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 2px; font-size: 16px; }
+.opt input { width: 22px; height: 22px; flex: none; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.metric { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; padding: 12px 0; border-top: 1px solid var(--line); }
+.metric:first-of-type { border-top: 0; }
+.metric .k { font-weight: 700; }
+.metric .v { font-size: 26px; font-weight: 700; }
+.metric .d { grid-column: 1 / -1; color: var(--muted); font-size: 14px; }
+.ask { border: 2px solid var(--c-go); background: var(--go-bg); }
+.win { border: 2px solid var(--c-wrap); background: var(--ok-bg); }
+.asktitle { font-weight: 700; font-size: 20px; line-height: 1.25; margin-bottom: 6px; }
+.confetti { display: block; width: 100%; height: auto; margin: -4px 0 10px; }
+.ok { color: var(--c-wrap); }
+.bad { color: var(--c-go); }
+a.btn { display: inline-flex; align-items: center; text-decoration: none; color: inherit; }
+.msgbox { margin-top: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--tint); }
+.msgbox .mt { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+textarea.msg { min-height: 84px; margin-top: 0; font: inherit; font-size: 15px; }
+textarea.copy { width: 100%; min-height: 160px; font: 14px/1.4 ui-monospace, Menlo, Consolas, monospace; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px; margin-top: 10px; }
+.hist { list-style: none; margin: 0; padding: 0; }
+.hist li { padding: 10px 0; border-top: 1px solid var(--line); font-size: 15px; }
+.hist li:first-child { border-top: 0; }
+.hist .s { color: var(--muted); font-size: 14px; }
+.timers summary { font-weight: 700; cursor: pointer; min-height: 32px; }
+.timers summary .s { font-weight: 400; color: var(--muted); font-size: 14px; }
+.srow { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 15px; margin: 0; }
+.srow span { flex: 1; }
+.srow input { width: 84px; min-height: 44px; text-align: center; flex: none; }
+.srow small { color: var(--muted); width: 28px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="bar" id="bar" hidden><div class="in" id="barin"></div></div>
+<div class="sr" id="live" aria-live="polite"></div>
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'ocp-run-v1', CKEY = 'ocp-cfg-v1', HKEY = 'ocp-hist-v1';
+  var mem = {};
+  function load(k, d) {
+    try { var v = localStorage.getItem(k); if (v) return JSON.parse(v); } catch (e) { if (k in mem) return mem[k]; return d; }
+    return (k in mem) ? mem[k] : d;
+  }
+  function save(k, v) { mem[k] = v; try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function drop(k) { delete mem[k]; try { localStorage.removeItem(k); } catch (e) {} }
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function todayISO() { var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function fmtDur(ms) {
+    if (ms == null || isNaN(ms)) return '–';
+    var neg = ms < 0, s = Math.round(Math.abs(ms) / 1000), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60;
+    var out = h ? h + ':' + pad(m) + ':' + pad(x) : m + ':' + pad(x);
+    return (neg ? '-' : '') + out;
+  }
+  function fmtClock(t) { var d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()); }
+  function fmtShort(t) { var d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  function fmtDate(iso) {
+    try { return new Date(iso + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return iso; }
+  }
+
+  var PHASES = {
+    prep: { name: 'Before 3 PM', c: 'var(--c-prep)' },
+    flight: { name: 'Pre-flight at Level 5', c: 'var(--c-flight)' },
+    standby: { name: 'Standby', c: 'var(--c-standby)' },
+    go: { name: 'Print', c: 'var(--c-go)' },
+    wrap: { name: 'Wrap up', c: 'var(--c-wrap)' }
+  };
+  var PHASE_ORDER = ['prep', 'flight', 'standby', 'go', 'wrap'];
+
+  function buildSteps(c) {
+    var q = c.qty || 170, s = [];
+    var dt = fmtDate(c.date || todayISO());
+    function add(phase, id, title, lines, o) {
+      var st = { phase: phase, id: id, title: title, lines: lines };
+      if (o) for (var k in o) st[k] = o[k];
+      s.push(st);
+    }
+    add('prep', 'confirm', 'Confirm quantity and format with the Usher Leader', [
+      'The Ushers decide how many outlines are needed and the printed format.',
+      'Default is ' + q + ' copies, with the sermon headings on the A5 page.',
+      'If the Usher Leader gives a different number, print that number instead.'
+    ]);
+    add('prep', 'dotted', 'Print the dotted A5 sheets', [
+      'Print ' + q + ' dotted A5 sheets, 2-sided, at Level 5.',
+      'Stay with the printer while it runs. If it jams or misfeeds, call Shing, the Office Systems PIC.',
+      'No A5 paper? Message Timothy, the Paper PIC.'
+    ], { helps: ['printer', 'paper'] });
+    add('prep', 'give', 'Hand the sheets to the Ushers', [
+      'Give the printed dotted sheets to the Usher dept.'
+    ]);
+    add('flight', 'setup', 'Set up your printer', [
+      'Be at Level 5 by the planned start and set up your printer.',
+      'The second printer is already set up by Office Systems, so you do not need to set it up.',
+      'Technical issue? Contact Shing, the Office Systems PIC.'
+    ], { helps: ['printer'] });
+    add('flight', 'paper', 'Load A5 paper', [
+      'Feed A5 paper into the tray. The Office dept supplies the paper.',
+      'No A5 paper? Message Timothy, the Paper PIC.'
+    ], { helps: ['paper'] });
+    add('flight', 'tray', 'Change the tray paper size to A5', [
+      'Set the tray paper size to A5 on each printer you are using.'
+    ]);
+    add('flight', 'template', 'Open the A5 template; set title and date', [
+      'Open the A5 sermon template.',
+      'Set the sermon title and set the date to ' + dt + '.'
+    ]);
+    add('flight', 'site', 'Open the CERC sermon page, ready to refresh', [
+      'Open the CERC sermon page on the print workstation so you can refresh and download the moment the outline is up.'
+    ], { suggested: true });
+    add('standby', 'standby', 'Stand by at Level 5, ready to go', [
+      'Stay at Level 5, set up and ready.',
+      'The Editor will message your phone when the outline is uploaded. That message is GO.',
+      'If the preacher is late, stay ready. The speed of the swap depends on being ready.'
+    ], { kind: 'standby', tip: 'Watch therefore, for you know neither the day nor the hour. (Matthew 25:13)' });
+    add('go', 'download', 'Download the outline from the website', [
+      'On the print workstation, download the sermon outline from the CERC website.'
+    ]);
+    add('go', 'open', 'Open the outline file', [
+      'Open the file you just downloaded.'
+    ]);
+    add('go', 'copy', 'Copy the headings from the outline', [
+      'Copy the sermon headings from the outline file.'
+    ]);
+    add('go', 'paste', 'Paste the headings into the A5 template', [
+      'Paste the headings into the A5 sermon template.'
+    ]);
+    add('go', 'fit', 'Fit all headings on one page; format', [
+      'Make all the headings fit on 1 page.',
+      'Apply formatting changes to make the hardcopy outline neat.'
+    ]);
+    add('go', 'print', 'Press print on the A5 outline', [
+      'Print the A5 sermon outline.',
+      'Use both printers to speed it up.',
+      'Tap Done the moment you press print. This stops the go-to-print clock.'
+    ], { kind: 'print' });
+    add('go', 'watch', 'Watch the printing until all copies are out', [
+      'Stay with the printer(s) until every copy is out.',
+      'Jam or fault? Call Shing, the Office Systems PIC, straight away.'
+    ], { helps: ['printer'] });
+    add('wrap', 'handover', 'Hand the outlines to the Ushers', [
+      'The Ushers come up to Level 5 to collect the printed outlines.',
+      'Tap Done when they have them.'
+    ], { kind: 'handover' });
+    add('wrap', 'distribute', 'Did the Ushers distribute before the preacher came up?', [
+      'Ask the Usher Leader, or check the room: had the Ushers finished distributing the outlines before the preacher came up on the pulpit?',
+      'Cannot tell yet? Tap “Don’t know yet”. The summary will ask again at the end.'
+    ], { kind: 'ask' });
+    add('wrap', 'reset', 'Reset the printers to A4', [
+      'Feed A4 paper and change the tray paper size back to A4, so others can use the printers.'
+    ]);
+    return s;
+  }
+  var cache = { k: '', v: [] };
+  function steps(r) {
+    var k = JSON.stringify(r.cfg);
+    if (cache.k !== k) { cache.k = k; cache.v = buildSteps(r.cfg); }
+    return cache.v;
+  }
+
+  var CONFETTI = '<svg class="confetti" viewBox="0 0 360 140" aria-hidden="true" focusable="false"><rect x="159.2" y="72.2" width="9.3" height="10.3" rx="1" fill="#80ed99" transform="rotate(166 164 77)"/><circle cx="283" cy="67" r="3.1" fill="#ffd166"/><rect x="37.3" y="102.3" width="7.0" height="12.2" rx="1" fill="#e63946" transform="rotate(125 41 108)"/><circle cx="261" cy="89" r="2.9" fill="#f4a261"/><rect x="89.3" y="6.4" width="6.0" height="10.6" rx="1" fill="#80ed99" transform="rotate(84 92 12)"/><rect x="106.1" y="0.8" width="7.8" height="15.5" rx="1" fill="#4cc9f0" transform="rotate(15 110 9)"/><circle cx="38" cy="39" r="3.6" fill="#4cc9f0"/><rect x="42.1" y="16.9" width="9.2" height="9.0" rx="1" fill="#f4a261" transform="rotate(52 47 21)"/><rect x="77.4" y="115.7" width="7.8" height="10.4" rx="1" fill="#ff70a6" transform="rotate(85 81 121)"/><rect x="235.1" y="44.9" width="8.8" height="9.8" rx="1" fill="#e63946" transform="rotate(56 239 50)"/><circle cx="94" cy="21" r="3.6" fill="#80ed99"/><rect x="158.7" y="25.8" width="6.9" height="11.8" rx="1" fill="#ffd166" transform="rotate(132 162 32)"/><rect x="344.1" y="2.9" width="5.1" height="10.3" rx="1" fill="#4cc9f0" transform="rotate(156 347 8)"/><rect x="345.6" y="77.2" width="6.1" height="10.8" rx="1" fill="#e63946" transform="rotate(104 349 83)"/><circle cx="273" cy="49" r="2.9" fill="#f4a261"/><circle cx="226" cy="10" r="3.7" fill="#80ed99"/><path d="M293 25 q7 -9 14 0 t14 0" fill="none" stroke="#ffd166" stroke-width="2.5" stroke-linecap="round" transform="rotate(69 293 25)"/><rect x="82.8" y="78.5" width="9.7" height="10.4" rx="1" fill="#ffd166" transform="rotate(131 88 84)"/><circle cx="333" cy="117" r="2.7" fill="#ff70a6"/><path d="M184 40 q7 -9 14 0 t14 0" fill="none" stroke="#ff70a6" stroke-width="2.5" stroke-linecap="round" transform="rotate(133 184 40)"/><rect x="285.1" y="77.0" width="9.9" height="9.9" rx="1" fill="#ffd166" transform="rotate(53 290 82)"/><path d="M173 89 q7 -9 14 0 t14 0" fill="none" stroke="#f4a261" stroke-width="2.5" stroke-linecap="round" transform="rotate(111 173 89)"/><rect x="318.8" y="28.6" width="6.2" height="9.3" rx="1" fill="#4cc9f0" transform="rotate(3 322 33)"/><rect x="101.1" y="65.9" width="9.5" height="15.9" rx="1" fill="#f4a261" transform="rotate(175 106 74)"/><rect x="228.5" y="87.5" width="9.6" height="12.3" rx="1" fill="#ffd166" transform="rotate(105 233 94)"/><rect x="127.2" y="41.0" width="8.7" height="11.2" rx="1" fill="#f4a261" transform="rotate(6 132 47)"/><rect x="345.4" y="10.4" width="8.7" height="13.9" rx="1" fill="#e63946" transform="rotate(98 350 17)"/><rect x="275.0" y="115.5" width="9.4" height="11.9" rx="1" fill="#80ed99" transform="rotate(63 280 121)"/><rect x="276.2" y="110.3" width="5.1" height="9.5" rx="1" fill="#ff70a6" transform="rotate(103 279 115)"/><rect x="37.3" y="15.3" width="6.9" height="14.1" rx="1" fill="#ff70a6" transform="rotate(46 41 22)"/><rect x="203.7" y="57.0" width="7.6" height="11.2" rx="1" fill="#f4a261" transform="rotate(151 208 63)"/><rect x="35.8" y="3.0" width="8.1" height="15.4" rx="1" fill="#f4a261" transform="rotate(172 40 11)"/><rect x="92.6" y="3.7" width="8.8" height="11.4" rx="1" fill="#2a9d8f" transform="rotate(54 97 9)"/><rect x="323.3" y="63.8" width="6.0" height="12.0" rx="1" fill="#ff70a6" transform="rotate(43 326 70)"/><path d="M284 121 q7 -9 14 0 t14 0" fill="none" stroke="#ff70a6" stroke-width="2.5" stroke-linecap="round" transform="rotate(158 284 121)"/><rect x="318.5" y="27.0" width="9.2" height="14.0" rx="1" fill="#7b5cff" transform="rotate(24 323 34)"/><rect x="328.2" y="34.9" width="9.6" height="14.8" rx="1" fill="#80ed99" transform="rotate(30 333 42)"/><path d="M140 72 q7 -9 14 0 t14 0" fill="none" stroke="#80ed99" stroke-width="2.5" stroke-linecap="round" transform="rotate(121 140 72)"/><rect x="288.5" y="35.2" width="6.5" height="14.5" rx="1" fill="#4cc9f0" transform="rotate(109 292 42)"/><rect x="13.3" y="17.6" width="6.3" height="14.5" rx="1" fill="#e63946" transform="rotate(82 16 25)"/><rect x="276.8" y="122.7" width="8.3" height="14.7" rx="1" fill="#f4a261" transform="rotate(21 281 130)"/><path d="M336 93 q7 -9 14 0 t14 0" fill="none" stroke="#80ed99" stroke-width="2.5" stroke-linecap="round" transform="rotate(36 336 93)"/><circle cx="253" cy="102" r="3.0" fill="#e63946"/><rect x="123.1" y="86.8" width="9.0" height="15.3" rx="1" fill="#ffd166" transform="rotate(94 128 94)"/><rect x="36.7" y="116.0" width="6.0" height="15.2" rx="1" fill="#ffd166" transform="rotate(130 40 124)"/><rect x="8.2" y="71.0" width="8.3" height="10.4" rx="1" fill="#7b5cff" transform="rotate(117 12 76)"/><path d="M255 109 q7 -9 14 0 t14 0" fill="none" stroke="#f4a261" stroke-width="2.5" stroke-linecap="round" transform="rotate(115 255 109)"/><path d="M316 130 q7 -9 14 0 t14 0" fill="none" stroke="#7b5cff" stroke-width="2.5" stroke-linecap="round" transform="rotate(176 316 130)"/><rect x="250.3" y="2.8" width="7.8" height="14.4" rx="1" fill="#e63946" transform="rotate(91 254 10)"/><rect x="173.1" y="5.2" width="5.2" height="12.7" rx="1" fill="#f4a261" transform="rotate(146 176 12)"/><rect x="239.7" y="113.8" width="7.5" height="15.6" rx="1" fill="#80ed99" transform="rotate(85 243 122)"/><rect x="35.3" y="30.4" width="7.8" height="10.2" rx="1" fill="#4cc9f0" transform="rotate(95 39 35)"/><rect x="180.2" y="113.9" width="9.4" height="13.3" rx="1" fill="#ff70a6" transform="rotate(46 185 120)"/><rect x="110.5" y="19.1" width="6.0" height="12.8" rx="1" fill="#4cc9f0" transform="rotate(98 114 26)"/><rect x="177.6" y="75.7" width="7.0" height="14.6" rx="1" fill="#e63946" transform="rotate(5 181 83)"/><rect x="197.7" y="61.2" width="7.3" height="15.4" rx="1" fill="#f4a261" transform="rotate(124 201 69)"/><circle cx="282" cy="58" r="3.4" fill="#80ed99"/><circle cx="287" cy="120" r="3.3" fill="#7b5cff"/><circle cx="20" cy="40" r="2.8" fill="#e63946"/><rect x="11.3" y="36.2" width="5.5" height="14.1" rx="1" fill="#2a9d8f" transform="rotate(130 14 43)"/><rect x="47.0" y="66.7" width="9.4" height="9.2" rx="1" fill="#2a9d8f" transform="rotate(45 52 71)"/><rect x="221.4" y="105.1" width="7.7" height="10.5" rx="1" fill="#2a9d8f" transform="rotate(111 225 110)"/><path d="M83 75 q7 -9 14 0 t14 0" fill="none" stroke="#ffd166" stroke-width="2.5" stroke-linecap="round" transform="rotate(106 83 75)"/><rect x="257.1" y="103.3" width="9.5" height="10.4" rx="1" fill="#7b5cff" transform="rotate(162 262 109)"/><circle cx="275" cy="32" r="2.7" fill="#2a9d8f"/><path d="M142 62 q7 -9 14 0 t14 0" fill="none" stroke="#ffd166" stroke-width="2.5" stroke-linecap="round" transform="rotate(169 142 62)"/><rect x="218.6" y="102.2" width="9.8" height="9.8" rx="1" fill="#7b5cff" transform="rotate(17 224 107)"/><rect x="178.2" y="97.4" width="7.4" height="9.2" rx="1" fill="#2a9d8f" transform="rotate(91 182 102)"/><circle cx="269" cy="84" r="2.9" fill="#80ed99"/><rect x="76.5" y="105.3" width="5.7" height="13.8" rx="1" fill="#f4a261" transform="rotate(178 79 112)"/><rect x="32.8" y="13.4" width="7.2" height="13.2" rx="1" fill="#ff70a6" transform="rotate(70 36 20)"/><rect x="11.1" y="89.1" width="6.8" height="11.6" rx="1" fill="#ffd166" transform="rotate(152 15 95)"/><path d="M323 83 q7 -9 14 0 t14 0" fill="none" stroke="#e63946" stroke-width="2.5" stroke-linecap="round" transform="rotate(17 323 83)"/><rect x="35.9" y="105.9" width="6.0" height="13.1" rx="1" fill="#ff70a6" transform="rotate(158 39 112)"/><rect x="121.5" y="95.2" width="8.9" height="14.7" rx="1" fill="#f4a261" transform="rotate(50 126 103)"/><rect x="143.5" y="113.3" width="8.8" height="11.8" rx="1" fill="#7b5cff" transform="rotate(158 148 119)"/><circle cx="256" cy="17" r="4.3" fill="#80ed99"/><rect x="342.6" y="114.3" width="8.3" height="11.4" rx="1" fill="#4cc9f0" transform="rotate(9 347 120)"/></svg>';
+  // Minutes per step id before a nudge fires. Leave a step out (or 0) for no nudge.
+  var DEFAULT_NUDGES = {};
+  var SHING = '60192616991', TIM = '601123160488';
+  var PAPER_MSG = 'Hi Timothy, this is the Outline Printer. There is no A5 paper at Level 5 for the sermon outlines. Please could you arrange some? Thank you.';
+  var state = {
+    msg: false,
+    run: load(KEY, null),
+    cfg: load(CKEY, null) || { title: '', date: todayISO(), qty: 170, heads: true, second: true, planned: '', nudges: null, sound: true },
+    hist: load(HKEY, []),
+    copyText: null
+  };
+  if (state.run && state.run.cfg == null) state.run = null;
+  if (!state.cfg.nudges) state.cfg.nudges = JSON.parse(JSON.stringify(DEFAULT_NUDGES));
+
+  var app = document.getElementById('app'), bar = document.getElementById('bar'), barin = document.getElementById('barin'), live = document.getElementById('live');
+
+  function persist() { if (state.run) save(KEY, state.run); else drop(KEY); }
+  function buzz() { try { if (navigator.vibrate) navigator.vibrate(60); } catch (e) {} }
+  function say(t) { live.textContent = t; }
+
+  var AC = window.AudioContext || window.webkitAudioContext, actx = null;
+  function unlock() {
+    try {
+      if (!AC) return;
+      if (!actx) actx = new AC();
+      if (actx.state === 'suspended') actx.resume();
+    } catch (e) {}
+  }
+  function chime(force) {
+    var c = state.run && state.run.cfg ? state.run.cfg : state.cfg;
+    if (!force && c.sound === false) return;
+    if (!actx) return;
+    try {
+      var t = actx.currentTime;
+      [660, 880, 660].forEach(function (f, i) {
+        var o = actx.createOscillator(), g = actx.createGain(), s = t + i * 0.24;
+        o.type = 'sine'; o.frequency.value = f;
+        g.gain.setValueAtTime(0.0001, s);
+        g.gain.exponentialRampToValueAtTime(0.4, s + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, s + 0.22);
+        o.connect(g); g.connect(actx.destination);
+        o.start(s); o.stop(s + 0.24);
+      });
+      try { if (navigator.vibrate) navigator.vibrate([120, 80, 120]); } catch (e2) {}
+    } catch (e) {}
+  }
+  var nz = { id: null, n: 0, at: 0 };
+  function nudgeSound(id, now) {
+    if (nz.id !== id) { nz.id = id; nz.n = 0; nz.at = 0; }
+    if (nz.n < 3 && now - nz.at >= 60000) { nz.n++; nz.at = now; chime(false); }
+  }
+
+  function metrics(r) {
+    var L = r.log, now = Date.now();
+    function dur(id) { var x = L[id]; return x && x.start && x.end ? x.end - x.start : null; }
+    var goAt = L.standby && L.standby.end, printAt = L.print && L.print.end, hoAt = L.handover && L.handover.end;
+    return {
+      standby: dur('standby'),
+      goToPrint: goAt && printAt ? printAt - goAt : null,
+      printRun: dur('watch'),
+      handoverAt: hoAt || null,
+      total: (r.finishedAt || now) - r.startedAt
+    };
+  }
+
+  function startRun(cfg) {
+    var now = Date.now();
+    state.run = { startedAt: now, cfg: cfg, i: 0, log: {}, dist: null, finishedAt: null };
+    state.run.log[steps(state.run)[0].id] = { start: now };
+    persist(); render();
+  }
+
+  function focusNow() {
+    var el = document.getElementById('nowcard');
+    if (!el) return;
+    try { el.focus({ preventScroll: true }); } catch (e) {}
+    try { el.scrollIntoView({ block: 'start' }); } catch (e) { window.scrollTo(0, el.offsetTop); }
+  }
+
+  function done(skipped) {
+    state.msg = false;
+    var r = state.run, S = steps(r), st = S[r.i], now = Date.now();
+    var L = r.log[st.id] || (r.log[st.id] = { start: now });
+    L.end = now;
+    if (skipped) L.skipped = true;
+    if (r.i >= S.length - 1) {
+      r.finishedAt = now;
+      pushHist(r);
+    } else {
+      r.i++;
+      r.log[S[r.i].id] = { start: now };
+    }
+    persist(); buzz(); render(); focusNow();
+    if (r.finishedAt && r.dist === 'yes') celebrate();
+    if (!r.finishedAt) say('Now: ' + S[r.i].title);
+  }
+
+  function back() {
+    state.msg = false;
+    var r = state.run, S = steps(r), L;
+    if (r.finishedAt) {
+      r.finishedAt = null;
+      state.hist = state.hist.filter(function (h) { return h.runStart !== r.startedAt; });
+      save(HKEY, state.hist);
+      L = r.log[S[S.length - 1].id]; delete L.end; delete L.skipped;
+    } else {
+      if (r.i === 0) return;
+      delete r.log[S[r.i].id];
+      r.i--;
+      if (S[r.i].id === 'distribute') r.dist = null;
+      L = r.log[S[r.i].id]; delete L.end; delete L.skipped;
+    }
+    persist(); render(); focusNow();
+  }
+
+  function pushHist(r) {
+    var m = metrics(r);
+    state.hist = state.hist.filter(function (h) { return h.runStart !== r.startedAt; });
+    state.hist.unshift({
+      runStart: r.startedAt, date: r.cfg.date,
+      goToPrint: m.goToPrint, standby: m.standby, dist: r.dist || null, total: m.total
+    });
+    state.hist = state.hist.slice(0, 20);
+    save(HKEY, state.hist);
+  }
+
+  function distText(d) {
+    if (d === 'yes') return 'Outlines distributed before the preacher came up';
+    if (d === 'no') return 'Preacher was already up before the outlines were distributed';
+    return 'Not confirmed whether the Ushers distributed before the preacher came up';
+  }
+
+  function summaryText(r) {
+    var m = metrics(r), S = steps(r), out = [];
+    out.push('Outline Printer run: ' + fmtDate(r.cfg.date));
+    out.push('');
+    out.push('Go to print: ' + fmtDur(m.goToPrint));
+    out.push('Standby wait: ' + fmtDur(m.standby));
+    out.push('Printing run: ' + fmtDur(m.printRun));
+    out.push('Handover to Ushers: ' + (m.handoverAt ? fmtClock(m.handoverAt) : '–'));
+    out.push(distText(r.dist));
+    out.push('Total run: ' + fmtDur(m.total));
+    out.push('');
+    S.forEach(function (s) {
+      var L = r.log[s.id], d = L && L.end ? fmtDur(L.end - L.start) : '–';
+      out.push(s.title + ': ' + d + (L && L.skipped ? ' (skipped)' : ''));
+    });
+    return out.join('\n');
+  }
+
+  function setupView() {
+    var c = state.cfg;
+    var h = '<h1>Sunday cue sheet</h1><p class="lede">For the Outline Printer. Start when you begin your Sunday run. The sheet reminds you what to do at each step and times every one.</p>';
+    h += '<div class="card">';
+    h += '<label class="opt"><input type="checkbox" id="f-sound"' + (c.sound !== false ? ' checked' : '') + '> Play a sound when a step runs over</label>';
+    h += '<button class="btn" data-act="testsound">Play test sound</button>';
+    h += '</div>';
+    var tl = buildSteps(c).filter(function (x) { return x.kind !== 'standby' && x.kind !== 'ask'; });
+    var nset = tl.filter(function (x) { return (c.nudges[x.id] || 0) > 0; }).length;
+    h += '<details class="card timers"><summary>Step timers <span class="s">(' + nset + ' of ' + tl.length + ' on)</span></summary><p class="lede" style="margin:8px 0 0">Minutes each step should take. The sheet nudges you when a step runs over. Leave a box blank for no nudge on that step.</p>';
+    PHASE_ORDER.forEach(function (pk) {
+      var sub = tl.filter(function (x) { return x.phase === pk; });
+      if (!sub.length) return;
+      h += '<div class="phasehead" style="--c:' + PHASES[pk].c + '">' + esc(PHASES[pk].name) + '</div>';
+      sub.forEach(function (x) {
+        var v = c.nudges[x.id] || '';
+        h += '<label class="srow"><span>' + esc(x.title) + '</span><input type="number" min="0" step="0.5" inputmode="decimal" placeholder="off" id="n-' + x.id + '" value="' + esc(v) + '"><small>min</small></label>';
+      });
+    });
+    h += '<button class="btn quiet" data-act="nudge-defaults" style="margin-top:10px">Reset timers to defaults</button></details>';
+    h += '<button class="btn primary wide" data-act="start">Start Sunday run</button>';
+    if (state.hist.length) {
+      h += '<h2 style="margin-top:24px">Recent Sundays</h2><div class="card"><ul class="hist">';
+      state.hist.slice(0, 8).forEach(function (x) {
+        var p = x.dist === 'yes' ? 'distributed before the preacher came up' : (x.dist === 'no' ? 'preacher was already up' : '');
+        h += '<li><b>' + esc(fmtDate(x.date)) + '</b><div class="s">Go to print ' + fmtDur(x.goToPrint) + ' · standby ' + fmtDur(x.standby) + (p ? ' · ' + esc(p) : '') + '</div></li>';
+      });
+      h += '</ul><button class="btn quiet" data-act="clearhist">Clear history</button></div>';
+    }
+    app.innerHTML = h;
+    bar.hidden = true;
+  }
+
+  function runView() {
+    var r = state.run, S = steps(r), st = S[r.i], ph = PHASES[st.phase], n = S.length;
+    var doneCount = 0; S.forEach(function (s) { if (r.log[s.id] && r.log[s.id].end) doneCount++; });
+    var h = '<div class="top"><div><div class="who">Sunday cue sheet</div><div class="when">' + esc(fmtDate(r.cfg.date)) + '</div></div>';
+    h += '<div class="clock num"><span id="clock"></span><small>Run <span id="tTotal"></span></small></div></div>';
+    h += '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="' + n + '" aria-valuenow="' + doneCount + '"><i style="width:' + Math.round(doneCount / n * 100) + '%"></i></div>';
+    h += '<div class="ptext"><span>Step ' + (r.i + 1) + ' of ' + n + '</span><span>' + doneCount + ' done</span></div>';
+
+    function listFor(items) {
+      var out = '';
+      PHASE_ORDER.forEach(function (pk) {
+        var sub = items.filter(function (x) { return x.phase === pk; });
+        if (!sub.length) return;
+        out += '<div class="phasehead" style="--c:' + PHASES[pk].c + '">' + esc(PHASES[pk].name) + '</div><ul class="list">';
+        sub.forEach(function (x) {
+          var L = r.log[x.id], cls = 'todo', mark = '', t = '';
+          if (L && L.end) { cls = L.skipped ? 'skip done' : 'done'; mark = L.skipped ? '–' : '✓'; t = L.skipped ? 'skipped' : fmtDur(L.end - L.start); if (x.id === 'distribute') t = r.dist === 'yes' ? 'Yes' : (r.dist === 'no' ? 'No' : 'Not yet'); }
+          out += '<li class="' + cls + '"><span class="mark">' + mark + '</span><span>' + esc(x.title) + (x.suggested ? '<span class="tag">suggested</span>' : '') + '</span><span class="t num">' + t + '</span></li>';
+        });
+        out += '</ul>';
+      });
+      return out;
+    }
+    var past = S.slice(0, r.i), future = S.slice(r.i + 1);
+    if (past.length) h += '<h2 class="sect">Done so far</h2>' + listFor(past);
+
+    h += '<div class="card now" id="nowcard" tabindex="-1" style="--stripe:' + ph.c + '"><div class="phase">' + esc(ph.name) + '</div><h1>' + esc(st.title) + '</h1>';
+    if (st.suggested) h += '<span class="tag" style="margin:0">suggested step</span>';
+    h += '<ul class="lines">';
+    st.lines.forEach(function (l) { h += '<li>' + esc(l) + '</li>'; });
+    h += '</ul>';
+    if (st.tip) h += '<div class="tip"><b>Remember</b>' + esc(st.tip) + '</div>';
+    var hs = st.helps || [];
+    if (hs.indexOf('printer') >= 0) {
+      h += '<div class="row2" style="margin:12px 0 0"><a class="btn" href="tel:+' + SHING + '">Call Shing (019-261 6991)</a><a class="btn" href="https://wa.me/' + SHING + '" target="_blank" rel="noopener">WhatsApp Shing</a></div>';
+    }
+    if (hs.indexOf('paper') >= 0) {
+      h += '<div class="row2" style="margin:12px 0 0"><button class="btn" data-act="paper-msg">' + (state.msg ? 'Hide message' : 'No A5 paper? Message Timothy') + '</button></div>';
+      if (state.msg) {
+        var enc = encodeURIComponent(PAPER_MSG);
+        h += '<div class="msgbox"><div class="mt">Message to Timothy, Paper PIC (011-2316 0488)</div><textarea class="copy msg" id="msgtext" readonly>' + esc(PAPER_MSG) + '</textarea><div class="row2" style="margin:8px 0 0">';
+        if (navigator.share) h += '<button class="btn primary" data-act="msg-share">Send…</button>';
+        h += '<a class="btn" href="https://wa.me/' + TIM + '?text=' + enc + '" target="_blank" rel="noopener">WhatsApp</a><a class="btn" href="sms:+' + TIM + '?&body=' + enc + '">SMS</a><button class="btn" data-act="msg-copy">Copy</button></div></div>';
+      }
+    }
+    if (st.kind === 'standby') {
+      h += '<div class="timer"><span class="big num" id="tStep"></span><span class="lab">waiting</span></div>';
+    } else {
+      var lim0 = Number((r.cfg.nudges || {})[st.id]) || 0;
+      if (lim0 > 0) {
+        h += '<div class="timer" id="timerBox"><span class="big num" id="tStep"></span><span class="lab">on this step · nudge at ' + lim0 + ' min</span></div>';
+        h += '<div class="note go" id="slow" hidden></div>';
+      }
+    }
+    h += '</div>';
+    if (S[r.i + 1]) h += '<div class="next">Next: ' + esc(S[r.i + 1].title) + '</div>';
+
+
+    if (future.length) h += '<h2 class="sect">Coming up</h2>' + listFor(future);
+    h += '<div class="row2" style="margin-top:22px"><button class="btn quiet" data-act="reset">Reset this run</button></div>';
+    app.innerHTML = h;
+
+    var main;
+    barin.className = 'in' + (st.kind === 'ask' ? ' ask' : '');
+    if (st.kind === 'ask') {
+      barin.innerHTML = '<button class="btn primary main" data-act="dist-yes">Yes, distributed first</button><button class="btn main" data-act="dist-no">No, he was already up</button><button class="btn" data-act="back" aria-label="Back one step">Back</button><button class="btn quiet" data-act="dist-unk">Don’t know yet</button>';
+      bar.hidden = false;
+      tick();
+      return;
+    }
+    if (st.kind === 'standby') main = '<button class="btn go main" data-act="done">Editor says GO</button>';
+    else if (r.i === n - 1) main = '<button class="btn primary main" data-act="done">Finish run</button>';
+    else main = '<button class="btn primary main" data-act="done">Done</button>';
+    barin.innerHTML = '<button class="btn" data-act="back" aria-label="Back one step"' + (r.i === 0 ? ' disabled' : '') + '>Back</button>' + main + (st.kind === 'standby' ? '' : '<button class="btn quiet" data-act="skip">Skip</button>');
+    bar.hidden = false;
+    tick();
+  }
+
+  function distCard(r) {
+    if (r.dist === 'yes') {
+      return '<div class="card win">' + CONFETTI + '<div class="asktitle">Outlines were distributed before the preacher came up.</div><p>Well done. The Ushers had the outlines in hand before he went up to the pulpit.</p><div class="row2" style="margin:0"><button class="btn" data-act="celebrate">Celebrate again</button><button class="btn quiet" data-act="dist-change">Change answer</button></div></div>';
+    }
+    if (r.dist === 'no') {
+      return '<div class="card ask"><div class="asktitle">The preacher was already up before the outlines were distributed.</div><p>Noted. The times below show where the time went.</p><button class="btn quiet" data-act="dist-change">Change answer</button></div>';
+    }
+    return '<div class="card ask"><div class="asktitle">Did the Ushers distribute the outlines before the preacher came up?</div><p>You can answer now, or when you know. Leave this page open.</p><div class="row2" style="margin:0"><button class="btn primary" data-act="dist-yes">Yes, distributed first</button><button class="btn" data-act="dist-no">No, he was already up</button></div></div>';
+  }
+
+  function fanfare() {
+    var c = state.run && state.run.cfg ? state.run.cfg : state.cfg;
+    if (c.sound === false || !actx) return;
+    try {
+      var t = actx.currentTime;
+      [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach(function (f, i) {
+        var o = actx.createOscillator(), g = actx.createGain(), s = t + i * 0.11, len = i === 4 ? 0.7 : 0.25;
+        o.type = 'triangle'; o.frequency.value = f;
+        g.gain.setValueAtTime(0.0001, s);
+        g.gain.exponentialRampToValueAtTime(0.3, s + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, s + len);
+        o.connect(g); g.connect(actx.destination);
+        o.start(s); o.stop(s + len + 0.02);
+      });
+      try { if (navigator.vibrate) navigator.vibrate([80, 60, 80, 60, 200]); } catch (e2) {}
+    } catch (e) {}
+  }
+
+  function celebrate() {
+    fanfare();
+    var old = document.getElementById('confetti'); if (old) old.remove();
+    var cv = document.createElement('canvas');
+    cv.id = 'confetti'; cv.setAttribute('aria-hidden', 'true');
+    cv.style.cssText = 'position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2000';
+    document.body.appendChild(cv);
+    var g = null;
+    try { g = cv.getContext('2d'); } catch (e) {}
+    if (!g) { cv.remove(); return; }
+    var dpr = Math.min(window.devicePixelRatio || 1, 2), W = window.innerWidth, H = window.innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    g.scale(dpr, dpr);
+    var colors = ['#e63946', '#f4a261', '#ffd166', '#2a9d8f', '#4cc9f0', '#7b5cff', '#ff70a6', '#80ed99'];
+    var GRAV = 520, ps = [];
+    function burst(n, x, spread) {
+      for (var i = 0; i < n; i++) {
+        var ang = -Math.PI / 2 + (Math.random() - 0.5) * spread;
+        var sp = Math.sqrt(2 * GRAV * H) * 1.25 * (0.8 + Math.random() * 0.55);
+        ps.push({
+          x: x + (Math.random() - 0.5) * 40, y: H + 10,
+          vx: Math.cos(ang) * sp * 0.3, vy: Math.sin(ang) * sp,
+          w: 6 + Math.random() * 7, h: 9 + Math.random() * 8,
+          r: Math.random() * 6.28, vr: (Math.random() - 0.5) * 14, fl: Math.random() * 6.28,
+          c: colors[(Math.random() * colors.length) | 0], round: Math.random() < 0.25
+        });
+      }
+    }
+    var waves = [[0, 60, 0.15, 1.0], [0, 80, 0.5, 1.4], [0, 60, 0.85, 1.0], [450, 70, 0.3, 1.2], [450, 70, 0.7, 1.2], [900, 90, 0.5, 1.6]];
+    var t0 = performance.now(), last = t0;
+    function frame(now) {
+      var dt = Math.min(0.05, (now - last) / 1000); last = now;
+      waves = waves.filter(function (w) {
+        if (now - t0 >= w[0]) { burst(w[1], W * w[2], w[3]); return false; }
+        return true;
+      });
+      g.clearRect(0, 0, W, H);
+      var alive = 0;
+      ps.forEach(function (p) {
+        p.vy += GRAV * dt;
+        if (p.vy > 0) { p.vy *= (1 - 2.4 * dt); p.vx *= (1 - 1.6 * dt); }
+        else { p.vy *= (1 - 0.5 * dt); p.vx *= (1 - 0.5 * dt); }
+        p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.vr * dt; p.fl += dt * 7;
+        if (p.y < H + 30) {
+          alive++;
+          g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.fillStyle = p.c;
+          if (p.round) { g.beginPath(); g.arc(0, 0, p.w / 2, 0, 6.2832); g.fill(); }
+          else { g.scale(1, Math.max(0.15, Math.abs(Math.cos(p.fl)))); g.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); }
+          g.restore();
+        }
+      });
+      if ((alive || waves.length) && now - t0 < 10000) requestAnimationFrame(frame); else cv.remove();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function summaryView() {
+    var r = state.run, m = metrics(r), S = steps(r);
+    var h = '<h1>Run complete</h1><p class="lede">' + esc(fmtDate(r.cfg.date)) + '</p>' + distCard(r) + '<div class="card">';
+    h += '<div class="metric"><span class="k">Go to print</span><span class="v num">' + fmtDur(m.goToPrint) + '</span><span class="d">From the Editor\'s GO to you pressing print. This is the pit stop.</span></div>';
+    h += '<div class="metric"><span class="k">Standby wait</span><span class="v num">' + fmtDur(m.standby) + '</span><span class="d">Ready and waiting at Level 5 before GO.</span></div>';
+    h += '<div class="metric"><span class="k">Printing run</span><span class="v num">' + fmtDur(m.printRun) + '</span><span class="d">From pressing print until all copies were out.</span></div>';
+    h += '<div class="metric"><span class="k">Handed to the Ushers</span><span class="v num">' + (m.handoverAt ? fmtShort(m.handoverAt) : '–') + '</span><span class="d">When you gave them the printed outlines.</span></div>';
+    h += '<div class="metric"><span class="k">Total run</span><span class="v num">' + fmtDur(m.total) + '</span></div>';
+    h += '</div><h2>Step times</h2><ul class="list">';
+    S.forEach(function (s) {
+      var L = r.log[s.id], t = L && L.end ? (L.skipped ? 'skipped' : fmtDur(L.end - L.start)) : '–';
+      if (s.id === 'distribute' && L && L.end) t = r.dist === 'yes' ? 'Yes' : (r.dist === 'no' ? 'No' : 'Not yet');
+      h += '<li class="' + (L && L.skipped ? 'skip done' : 'done') + '"><span class="mark">' + (L && L.skipped ? '–' : '✓') + '</span><span>' + esc(s.title) + '</span><span class="t num">' + t + '</span></li>';
+    });
+    h += '</ul><div class="row2" style="margin-top:18px"><button class="btn" data-act="copy">Copy summary</button><button class="btn" data-act="undo-finish">Reopen last step</button></div>';
+    if (state.copyText) h += '<textarea class="copy" id="copybox" readonly>' + esc(state.copyText) + '</textarea>';
+    h += '<button class="btn primary wide" data-act="newrun" style="margin-top:8px">Start a new run</button>';
+    app.innerHTML = h;
+    bar.hidden = true;
+    var cb = document.getElementById('copybox'); if (cb) { cb.focus(); cb.select(); }
+  }
+
+  function render() {
+    if (!state.run) setupView();
+    else if (state.run.finishedAt) summaryView();
+    else runView();
+  }
+
+  function tick() {
+    var r = state.run; if (!r || r.finishedAt) return;
+    var now = Date.now(), S = steps(r), st = S[r.i], L = r.log[st.id];
+    var el = document.getElementById('clock'); if (el) el.textContent = fmtClock(now);
+    el = document.getElementById('tTotal'); if (el) el.textContent = fmtDur(now - r.startedAt);
+    var el2 = document.getElementById('tStep'), elapsed = L ? now - L.start : 0;
+    if (el2) el2.textContent = fmtDur(elapsed);
+    if (st.kind === 'standby') {
+      var pn = document.getElementById('plan');
+      if (pn) {
+        pn.textContent = 'Stay ready and wait for the Editor\'s message. A late preacher is fine.';
+      }
+    } else {
+      var lim = Number((r.cfg.nudges || {})[st.id]) || 0, sl = document.getElementById('slow'), tb = document.getElementById('timerBox');
+      var over = lim > 0 && elapsed > lim * 60000;
+      if (sl) { sl.hidden = !over; if (over && !sl.getAttribute('data-set')) { sl.innerHTML = 'This step has run over ' + lim + ' min.' + ((st.helps || []).indexOf('printer') >= 0 ? ' Printer trouble? <a href="tel:+' + SHING + '">Call Shing</a>, the Office Systems PIC.' : ''); sl.setAttribute('data-set', '1'); } if (!over) sl.removeAttribute('data-set'); }
+      if (tb) tb.classList.toggle('slow', over);
+      if (over) nudgeSound(st.id, now);
+    }
+  }
+  setInterval(tick, 1000);
+
+  function readSetup() {
+    var c = state.cfg;
+    c.title = ''; c.date = todayISO(); c.qty = 170; c.planned = ''; c.heads = true;
+    c.second = true;
+    c.nudges = c.nudges || {};
+    buildSteps(c).forEach(function (x) {
+      var el = document.getElementById('n-' + x.id);
+      if (el) { var v = parseFloat(el.value); c.nudges[x.id] = v > 0 ? v : 0; }
+    });
+    c.sound = document.getElementById('f-sound').checked;
+    save(CKEY, c);
+    return JSON.parse(JSON.stringify(c));
+  }
+
+  document.addEventListener('click', function (e) {
+    unlock();
+    var b = e.target.closest ? e.target.closest('[data-act]') : null;
+    if (!b || b.disabled) return;
+    var a = b.getAttribute('data-act'), r = state.run;
+    if (a === 'nudge-defaults') { state.cfg.nudges = JSON.parse(JSON.stringify(DEFAULT_NUDGES)); save(CKEY, state.cfg); render(); }
+    else if (a === 'dist-yes' || a === 'dist-no' || a === 'dist-unk') {
+      r.dist = a === 'dist-yes' ? 'yes' : (a === 'dist-no' ? 'no' : 'unknown');
+      if (r.finishedAt) { persist(); pushHist(r); render(); if (r.dist === 'yes') celebrate(); }
+      else done(false);
+    }
+    else if (a === 'celebrate') celebrate();
+    else if (a === 'dist-change') { r.dist = null; persist(); if (r.finishedAt) pushHist(r); render(); }
+    else if (a === 'paper-msg') { state.msg = !state.msg; render(); }
+    else if (a === 'msg-share') { try { navigator.share({ text: PAPER_MSG }).catch(function () {}); } catch (err) {} }
+    else if (a === 'msg-copy') {
+      var tb = document.getElementById('msgtext');
+      var sel = function () { if (tb) { tb.focus(); tb.select(); } };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(PAPER_MSG).then(function () { b.textContent = 'Copied'; }, sel);
+        else sel();
+      } catch (err) { sel(); }
+    }
+    else if (a === 'testsound') chime(true);
+    else if (a === 'start') startRun(readSetup());
+    else if (a === 'done') done(false);
+    else if (a === 'skip') done(true);
+    else if (a === 'back') back();
+    else if (a === 'reset') {
+      if (b.getAttribute('data-armed')) { state.run = null; state.copyText = null; persist(); render(); }
+      else {
+        b.setAttribute('data-armed', '1'); b.textContent = 'Tap again to reset. Times so far are lost.';
+        setTimeout(function () { if (b.parentNode) { b.removeAttribute('data-armed'); b.textContent = 'Reset this run'; } }, 4000);
+      }
+    }
+    else if (a === 'newrun') { state.run = null; state.copyText = null; persist(); render(); }
+    else if (a === 'undo-finish') back();
+    else if (a === 'clearhist') { state.hist = []; save(HKEY, state.hist); render(); }
+    else if (a === 'copy') {
+      var txt = summaryText(r);
+      var fallback = function () { state.copyText = txt; render(); };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(txt).then(function () { b.textContent = 'Copied'; }, fallback);
+        } else { fallback(); }
+      } catch (err) { fallback(); }
+    }
+  });
+
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+  render();
+  focusNow();
+  window.addEventListener('load', focusNow);
+})();
+</script>
+</body>
+</html>
